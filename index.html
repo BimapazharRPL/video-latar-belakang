@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Video Viewer</title>
+  <link rel="shortcut icon" href="https://tse2.mm.bing.net/th/id/OIP.1cURz4O_P2oDHi3FVshxcAHaHa?pid=Api&P=0&h=220" type="image/x-icon">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 90vh;
+      margin: 0;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input, button {
+      width: 95%;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <input id="input_link" type="text" placeholder="Masukkan link YouTube (contoh: https://youtu.be/abc123)">
+    <button onclick="openPopup()">Putar di Latar Belakang</button>
+  </div>
+
+  <script>
+    function extractVideoId(url) {
+      if (url.includes("youtu.be/")) {
+        return url.split("youtu.be/")[1].split("?")[0];
+      } else if (url.includes("v=")) {
+        return url.split("v=")[1].split("&")[0];
+      }
+      return null;
+    }
+
+    function openPopup() {
+      const url = document.getElementById("input_link").value;
+      const videoId = extractVideoId(url);
+
+      if (!videoId) {
+        alert("Link tidak valid!");
+        return;
+      }
+
+      const videoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`;
+      const popup = window.open(
+        "",
+        "videoPopup",
+        "width=400,height=300,left=100,top=100"
+      );
+
+      if (popup) {
+        popup.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Player</title>
+            <style>
+              body, html { margin: 0; padding: 0; background: black; }
+              iframe { width: 100%; height: 100%; border: none; }
+            </style>
+          </head>
+          <body>
+            <iframe src="${videoUrl}" allow="autoplay"></iframe>
+          </body>
+          </html>
+        `);
+        popup.document.close();
+      } else {
+        alert("Popup diblokir! Harap izinkan pop-up di browser.");
+      }
+    }
+  </script>
+</body>
+</html>
