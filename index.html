@@ -114,6 +114,11 @@
     function onYouTubeIframeAPIReady() {
       // kosong, karena kita inisialisasi player saat loadVideo()
     }
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker registered', reg))
+        .catch(err => console.error('SW failed', err));
+    }
   </script>
 </body>
 </html>
